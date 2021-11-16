@@ -201,7 +201,22 @@ class ChannelInfoComponent extends React.Component<Props, State> {
                     </div>
 
                     <div className="d-flex pt-4">
-                      {this.props?.isMobile ? (
+                      <div
+                        onClick={() => {
+                          if (channelAdmins && userId) {
+                            if (channelAdmins.user_id === userId) {
+                              this.setState({ isShowMenuBar: true })
+                            }
+                          }
+                        }}
+                      >
+                        <button>
+                          <img src={moreInfoIcon} alt="more-info" />
+                        </button>
+                      </div>
+
+
+                      {/* {this.props?.isMobile ? (
                         <div
                           onClick={() => {
                             if (channelAdmins && userId) {
@@ -241,7 +256,7 @@ class ChannelInfoComponent extends React.Component<Props, State> {
                             </div>
                           </div>
                         </Popup>
-                      )}
+                      )} */}
 
                       <div>
                         <button>
