@@ -308,6 +308,8 @@ function Me(props) {
                       </div>
                       <span className="pl-2">Изменить контакт</span>
                     </div>
+                    
+                    {/* fix only "change contact" on the web */}
                     {/* <div className="d-flex pt-3">
                       <div>
                         <img src={blockUserImage} alt="block user" />

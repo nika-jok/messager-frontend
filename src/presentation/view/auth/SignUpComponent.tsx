@@ -173,7 +173,7 @@ export default class SignUpComponent extends React.Component<Props, State> {
                     }}
                   />
                 </label>
-                <input
+                {/* <input
                   id="file-input"
                   type="file"
                   onChange={(e) => {
@@ -186,13 +186,13 @@ export default class SignUpComponent extends React.Component<Props, State> {
                       this.setState({ avatar: e.target.files[0] })
                     }
                   }}
-                />
+                /> */}
               </div>
             </div>
 
-            <div className="pt-4">
+            <div className="pt-4" >
               <div>
-                <label className="d-block your-code-label">Имя</label>
+                <label className="d-block your-code-label pb-2" style={{ paddingLeft: '15px' }}>Имя</label>
                 <Input
                   value={name}
                   className={`${isNameError ? 'error-border' : ''}`}
@@ -205,7 +205,7 @@ export default class SignUpComponent extends React.Component<Props, State> {
                 />
               </div>
               <div className="pt-3">
-                <label className="d-block your-code-label">Фамилия</label>
+                <label className="d-block your-code-label pb-2" style={{ paddingLeft: '15px' }}>Фамилия</label>
                 <Input
                   className={`${isSurnameError ? 'error-border' : ''}`}
                   type="text"
@@ -218,7 +218,7 @@ export default class SignUpComponent extends React.Component<Props, State> {
                 />
               </div>
               <div className="pt-3">
-                <label className="d-block your-code-label ">
+                <label className="d-block your-code-label pb-2" style={{ paddingLeft: '15px' }}>
                   Имя пользователя
                 </label>
                 <Input
