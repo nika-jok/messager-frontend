@@ -1,51 +1,51 @@
-import { useCallback, useEffect, useState, lazy } from 'react'
-import styled from 'styled-components'
-import { useDebouncedCallback } from 'use-debounce'
-import ApiHelperMe from '../../../helpers/api/bio/me'
-import BrowserHistoryRouter from '../../../utils/BrowserHistoryRouter'
-import ApiHelper from '../../../helpers/api/contacts'
-import LoadingComponent from '../../../utils/LoadingComponent'
-import userIcon from '../../../assets/img/channels/add-user-icon.svg'
-import DisplaySearch from '../../Chats/DisplaySearch'
-import Settings from '../../Settings/Settings'
-import EditAccountComponent from '../../../presentation/view/settings/EditAccountComponent'
-import NotificationSettingsComponent from '../../../presentation/view/notifications/NotificationsComponent'
-import NotificationComponent from '../../SettingsDetailedNotifications/Settings'
-import Contacts from '../../Contacts/Contacts.jsx'
-import UserInfo from '../../User/User.jsx'
-import ChannelsListComponent from '../../../presentation/view/channels-list/ChannelsListComponent'
-import ChannelInfoComponent from '../../../presentation/view/channel-info/ChannelInfoComponent'
-import NewMessage from '../../../presentation/view/messages/NewMessage'
-import CreateChannelComponent from '../../../presentation/view/new-channel/CreateNewChannelComponent.tsx'
-import NewContact from '../../NewContact/NewContact'
-import EditChannelComponent from '../../../presentation/view/edit-channel/EditChannelComponent.tsx'
-import AdminChooseLevelComponent from '../../../presentation/view/level/admin-choose-level/AdminChooseLevelComponent'
-import ParticipationLevelsComponent from '../../../presentation/view/level/ParticipationLevelsComponent'
-import EditParticipationLevelComponent from '../../../presentation/view/level/EditParticipationLevelComponent'
-import UserUpdate from '../../UserUpdate/UserUpdate.jsx'
-import WithDrawals from '../../Withdrawals/Withdrawals'
-import Faq from '../../../presentation/view/faq/Faq.tsx'
-import AdminAnalytics from '../../AdminAnalytics/AdminAnalytics.jsx'
-import AdminPassword from '../../AdminPassword/Container.jsx'
-import Admin from '../../Admin/Admin'
-import AdminPayments from '../../AdminPayments/AdminPayments'
-import DesktopMenu from '../../DesktopMenu/DesktopMenu'
-import WithdrawalsCreate from '../../WithdrawalsCreate/WithdrawalsCreate.jsx'
-import DesktopChatsList from '../../DesktopChatsList'
-import CreateNewLevelComponent from '../../../presentation/view/levels/CreateNewLevelComponent'
-import ChooseLevelComponent from '../../../presentation/view/level/ChooseLevelComponent'
-import StorageHelper from '../../../utils/StorageHelper'
-import AuthComponent from '../../../presentation/view/auth/AuthComponent'
-import EnterCodeComponent from '../../../presentation/view/auth/EnterCode'
-import SignUpComponent from '../../../presentation/view/auth/SignUpComponent'
-import Storage from '../../../helpers/storage'
-import WelcomeChannelMessage from '../../WelcomeChannelMessage'
-import SearchInput from '../../SearchInput'
+import { useCallback, useEffect, useState, lazy } from "react";
+import styled from "styled-components";
+import { useDebouncedCallback } from "use-debounce";
+import ApiHelperMe from "../../../helpers/api/bio/me";
+import BrowserHistoryRouter from "../../../utils/BrowserHistoryRouter";
+import ApiHelper from "../../../helpers/api/contacts";
+import LoadingComponent from "../../../utils/LoadingComponent";
+import userIcon from "../../../assets/img/channels/add-user-icon.svg";
+import DisplaySearch from "../../Chats/DisplaySearch";
+import Settings from "../../Settings/Settings";
+import EditAccountComponent from "../../../presentation/view/settings/EditAccountComponent";
+import NotificationSettingsComponent from "../../../presentation/view/notifications/NotificationsComponent";
+import NotificationComponent from "../../SettingsDetailedNotifications/Settings";
+import Contacts from "../../Contacts/Contacts.jsx";
+import UserInfo from "../../User/User.jsx";
+import ChannelsListComponent from "../../../presentation/view/channels-list/ChannelsListComponent";
+import ChannelInfoComponent from "../../../presentation/view/channel-info/ChannelInfoComponent";
+import NewMessage from "../../../presentation/view/messages/NewMessage";
+import CreateChannelComponent from "../../../presentation/view/new-channel/CreateNewChannelComponent.tsx";
+import NewContact from "../../NewContact/NewContact";
+import EditChannelComponent from "../../../presentation/view/edit-channel/EditChannelComponent.tsx";
+import AdminChooseLevelComponent from "../../../presentation/view/level/admin-choose-level/AdminChooseLevelComponent";
+import ParticipationLevelsComponent from "../../../presentation/view/level/ParticipationLevelsComponent";
+import EditParticipationLevelComponent from "../../../presentation/view/level/EditParticipationLevelComponent";
+import UserUpdate from "../../UserUpdate/UserUpdate.jsx";
+import WithDrawals from "../../Withdrawals/Withdrawals";
+import Faq from "../../../presentation/view/faq/Faq.tsx";
+import AdminAnalytics from "../../AdminAnalytics/AdminAnalytics.jsx";
+import AdminPassword from "../../AdminPassword/Container.jsx";
+import Admin from "../../Admin/Admin";
+import AdminPayments from "../../AdminPayments/AdminPayments";
+import DesktopMenu from "../../DesktopMenu/DesktopMenu";
+import WithdrawalsCreate from "../../WithdrawalsCreate/WithdrawalsCreate.jsx";
+import DesktopChatsList from "../../DesktopChatsList";
+import CreateNewLevelComponent from "../../../presentation/view/levels/CreateNewLevelComponent";
+import ChooseLevelComponent from "../../../presentation/view/level/ChooseLevelComponent";
+import StorageHelper from "../../../utils/StorageHelper";
+import AuthComponent from "../../../presentation/view/auth/AuthComponent";
+import EnterCodeComponent from "../../../presentation/view/auth/EnterCode";
+import SignUpComponent from "../../../presentation/view/auth/SignUpComponent";
+import Storage from "../../../helpers/storage";
+import WelcomeChannelMessage from "../../WelcomeChannelMessage";
+import SearchInput from "../../SearchInput";
 
-const PrivateMessages = lazy(() => import('../PrivateMessagesDialog'))
+const PrivateMessages = lazy(() => import("../PrivateMessagesDialog"));
 const ChannelComponent = lazy(() =>
-  import('../../../presentation/view/channel/Channel.js')
-)
+  import("../../../presentation/view/channel/Channel.js")
+);
 
 const DialogsPageWrapper = styled.div`
   width: 100%;
@@ -68,7 +68,7 @@ const DialogsPageWrapper = styled.div`
     left: 20px;
     bottom: 20px;
   }
-`
+`;
 
 const DialogNotChosed = styled.div`
   text-align: center;
@@ -99,41 +99,41 @@ const DialogNotChosed = styled.div`
     width: 146px;
     height: 40px;
   }
-`
+`;
 
 const Home = (props) => {
-  const [lastOpened, setLastOpened] = useState('dialogs')
-  const isAuthorized = StorageHelper?.getUserData()?.token
-  const [user, setUser] = useState({})
+  const [lastOpened, setLastOpened] = useState("dialogs");
+  const isAuthorized = StorageHelper?.getUserData()?.token;
+  const [user, setUser] = useState({});
   const [chosedModal, setChosedModal] = useState(
-    isAuthorized ? 'chats' : 'welcome-channel-message'
-  )
+    isAuthorized ? "chats" : "welcome-channel-message"
+  );
 
-  const [newContact, setNewContact] = useState({})
-  const [chosedChannelName, setChosedChannel] = useState('')
-  const [channelNameFromLink, setChannelNameFromLink] = useState('')
-  const [openedUserIdModalInfo, setUserIdModal] = useState()
-  const [isLoading, setLoading] = useState(false)
-  const [search, setSearch] = useState('')
-  const [searchedContactList, setSearchedContactList] = useState([])
-  const [searchedGlobalList, setSearchedGlobalList] = useState([])
-  const [isAlreadyHas, setAlreadyHas] = useState(false)
-  const apiContacts = new ApiHelper()
+  const [newContact, setNewContact] = useState({});
+  const [chosedChannelName, setChosedChannel] = useState("");
+  const [channelNameFromLink, setChannelNameFromLink] = useState("");
+  const [openedUserIdModalInfo, setUserIdModal] = useState();
+  const [isLoading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [searchedContactList, setSearchedContactList] = useState([]);
+  const [searchedGlobalList, setSearchedGlobalList] = useState([]);
+  const [isAlreadyHas, setAlreadyHas] = useState(false);
+  const apiContacts = new ApiHelper();
 
-  const apiMe = new ApiHelperMe()
-  const [chosedId, setChosedId] = useState()
+  const apiMe = new ApiHelperMe();
+  const [chosedId, setChosedId] = useState();
 
-  const [channelInfoName, setChannelInfoName] = useState()
-  const [chosedChannelNameForEdit, setChosedChannelForEdit] = useState()
-  const [chosedEditLevelId, setChosedEditLevelId] = useState()
-  const [chosedLevels, setChosedLevels] = useState([])
-  const [isUpdate, setIsUpdate] = useState(false)
-  const [shouldAutoFocus, setShouldAutoFocus] = useState()
+  const [channelInfoName, setChannelInfoName] = useState();
+  const [chosedChannelNameForEdit, setChosedChannelForEdit] = useState();
+  const [chosedEditLevelId, setChosedEditLevelId] = useState();
+  const [chosedLevels, setChosedLevels] = useState([]);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [shouldAutoFocus, setShouldAutoFocus] = useState();
   const [transitionsHistory, setTransitionHistory] = useState([
-    { modal: 'dialogs', type: 'left' },
-    { modal: 'dialogs', type: 'right' },
-  ])
-  const [channelIdForCreatingLevel, setChannelIdForCreatingLevel] = useState()
+    { modal: "dialogs", type: "left" },
+    { modal: "dialogs", type: "right" },
+  ]);
+  const [channelIdForCreatingLevel, setChannelIdForCreatingLevel] = useState();
 
   const {
     children,
@@ -148,110 +148,117 @@ const Home = (props) => {
     editLevelViewModel,
     authViewModel,
     goBack,
-  } = props
+  } = props;
 
   useEffect(() => {
-    const savedChannel = Storage.get('channel_name')
+    const savedChannel = Storage.get("channel_name");
 
     if (savedChannel) {
-      setChosedChannel(savedChannel)
-      setLastOpened('choose-level-subscribe')
-      Storage.clear('channel_name')
+      setChosedChannel(savedChannel);
+      setLastOpened("choose-level-subscribe");
+      Storage.clear("channel_name");
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    setShouldAutoFocus(!shouldAutoFocus)
-  }, [chosedModal, chosedId, lastOpened, chosedChannelName])
-
-  useEffect(() => {
-    setTransitionHistory((prev) => [
-      ...prev,
-      { modal: chosedModal, type: 'left' },
-    ])
-  }, [chosedModal])
+    setShouldAutoFocus(!shouldAutoFocus);
+  }, [chosedModal, chosedId, lastOpened, chosedChannelName]);
 
   useEffect(() => {
     setTransitionHistory((prev) => [
       ...prev,
-      { modal: lastOpened, type: 'right' },
-    ])
-  }, [lastOpened])
+      { modal: chosedModal, type: "left" },
+    ]);
+  }, [chosedModal]);
+
+  useEffect(() => {
+    setTransitionHistory((prev) => [
+      ...prev,
+      { modal: lastOpened, type: "right" },
+    ]);
+  }, [lastOpened]);
 
   const openedModals = useCallback(() => {
     const left = transitionsHistory.filter(
-      (transition) => transition.type === 'left'
-    )
+      (transition) => transition.type === "left"
+    );
     const right = transitionsHistory.filter(
-      (transition) => transition.type === 'right'
-    )
+      (transition) => transition.type === "right"
+    );
 
-    return [left?.pop()?.modal, right?.pop().modal]
-  }, [transitionsHistory])
+    return [left?.pop()?.modal, right?.pop().modal];
+  }, [transitionsHistory]);
 
   const goBackInHistoryOfTransitions = (type) => {
     const history = transitionsHistory.filter(
       (transitions) => transitions.type === type
-    )
+    );
 
     const unChangedHistory = transitionsHistory.filter(
       (transitions) => transitions.type !== type
-    )
+    );
 
-    const changedHistory = history.slice(0, history.length - 1)
+    const changedHistory = history.slice(0, history.length - 1);
 
-    if (type === 'left') {
-      setChosedModal(changedHistory[changedHistory.length - 1]?.modal)
-      setLastOpened(unChangedHistory[unChangedHistory?.length - 1]?.modal)
-    } else if (type === 'right') {
-      setLastOpened(changedHistory[changedHistory.length - 1]?.modal)
-      setChosedModal(unChangedHistory[unChangedHistory?.length - 1]?.modal)
+    if (type === "left") {
+      setChosedModal(changedHistory[changedHistory.length - 1]?.modal);
+      setLastOpened(unChangedHistory[unChangedHistory?.length - 1]?.modal);
+    } else if (type === "right") {
+      setLastOpened(changedHistory[changedHistory.length - 1]?.modal);
+      setChosedModal(unChangedHistory[unChangedHistory?.length - 1]?.modal);
     }
 
-    setTransitionHistory([...unChangedHistory, ...changedHistory])
-  }
+    setTransitionHistory([...unChangedHistory, ...changedHistory]);
+  };
 
-  const [leftModal, rightModal] = openedModals()
+  const [leftModal, rightModal] = openedModals();
 
   useEffect(() => {
-    ;(async () => {
-      setLoading(true)
+    (async () => {
+      setLoading(true);
       if (isAuthorized) {
-        const { id, avatar, balance, firstName, lastName, username } = (
-          await apiMe.getMe()
-        ).data.bio
+        const { id, avatar, balance, firstName, lastName, username, isAdmin } =
+          (await apiMe.getMe()).data.bio;
 
-        setUser({ id, avatar, balance, firstName, lastName, username })
+        setUser({
+          id,
+          avatar,
+          balance,
+          firstName,
+          lastName,
+          username,
+          isAdmin,
+        });
 
-        setLoading(false)
+        setLoading(false);
       }
-    })()
-  }, [])
+    })();
+  }, []);
 
   const [debouncedCallback] = useDebouncedCallback(async (value) => {
-    if (value[0] === '@') {
-      const slicedUsername = value?.slice(1)
-      if (!slicedUsername) return
-      const data = await apiContacts.getGlobalUsersUsername(slicedUsername)
-      setSearchedContactList(data?.data?.bio?.contacts)
-      setSearchedGlobalList(data?.data?.bio?.global)
-      setAlreadyHas(true)
+    if (value[0] === "@") {
+      const slicedUsername = value?.slice(1);
+      if (!slicedUsername) return;
+      const data = await apiContacts.getGlobalUsersUsername(slicedUsername);
+      setSearchedContactList(data?.data?.bio?.contacts);
+      setSearchedGlobalList(data?.data?.bio?.global);
+      setAlreadyHas(true);
     } else {
-      if (!value) return
-      const data = await apiContacts.getGlobalUsersName(value)
-      setSearchedContactList(data?.data?.bio?.contacts)
-      setSearchedGlobalList(data?.data?.bio?.global)
-      setAlreadyHas(true)
+      if (!value) return;
+      const data = await apiContacts.getGlobalUsersName(value);
+      setSearchedContactList(data?.data?.bio?.contacts);
+      setSearchedGlobalList(data?.data?.bio?.global);
+      setAlreadyHas(true);
     }
-  }, 100)
+  }, 100);
 
   const changeInput = useCallback(async (e) => {
-    setAlreadyHas(false)
-    setSearch(e.target.value)
-    debouncedCallback(e.target.value)
-  }, [])
+    setAlreadyHas(false);
+    setSearch(e.target.value);
+    debouncedCallback(e.target.value);
+  }, []);
 
-  console.log(chosedChannelName)
+  console.log(chosedChannelName);
 
   return (
     <DialogsPageWrapper>
@@ -271,17 +278,17 @@ const Home = (props) => {
               <div className="children-container">
                 {!children ? (
                   <div className="w-100 h-100">
-                    {leftModal === 'chats' ? (
+                    {leftModal === "chats" ? (
                       <div className="page-title pt-3">Сообщения</div>
-                    ) : chosedModal === 'channels' ||
-                      leftModal === 'channel-info' ? (
+                    ) : chosedModal === "channels" ||
+                      leftModal === "channel-info" ? (
                       <div className="page-title pt-3">Каналы</div>
                     ) : undefined}
-                    {leftModal === 'chats' &&
-                    (lastOpened === 'dialogs' ||
-                      lastOpened === 'user-info' ||
-                      lastOpened === 'update-contact' ||
-                      lastOpened === 'add-contact') ? (
+                    {leftModal === "chats" &&
+                    (lastOpened === "dialogs" ||
+                      lastOpened === "user-info" ||
+                      lastOpened === "update-contact" ||
+                      lastOpened === "add-contact") ? (
                       <div className="search-input-wrap">
                         <SearchInput
                           placeholder="Поиск людей"
@@ -297,17 +304,17 @@ const Home = (props) => {
                     ) : (
                       <div
                         style={{
-                          width: !isMobile ? '388px' : '488px',
+                          width: !isMobile ? "388px" : "488px",
                         }}
                       >
-                        {leftModal === 'settings' ? (
+                        {leftModal === "settings" ? (
                           <Settings
                             goBack={goBackInHistoryOfTransitions}
                             setChosedModal={setChosedModal}
                             isMobile={isMobile}
                             chosedModal={chosedModal}
                           />
-                        ) : leftModal === 'edit-settings' ? (
+                        ) : leftModal === "edit-settings" ? (
                           <EditAccountComponent
                             isMobile={isMobile}
                             goBack={goBackInHistoryOfTransitions}
@@ -315,54 +322,54 @@ const Home = (props) => {
                             setChosedModal={setChosedModal}
                             editAccountViewModel={editAccountViewModel}
                           />
-                        ) : leftModal === 'admin' ? (
+                        ) : leftModal === "admin" ? (
                           <Admin
                             goBack={goBackInHistoryOfTransitions}
                             isMobile={isMobile}
                             setChosedModal={setChosedModal}
                           />
-                        ) : leftModal === 'admin-login' ? (
+                        ) : leftModal === "admin-login" ? (
                           <AdminPassword
                             goBack={goBackInHistoryOfTransitions}
                             setChosedModal={setChosedModal}
                             isMobile={isMobile}
                           />
-                        ) : leftModal === 'admin-analytics' ? (
+                        ) : leftModal === "admin-analytics" ? (
                           <AdminAnalytics
                             goBack={goBackInHistoryOfTransitions}
                             setChosedModal={setChosedModal}
                             isMobile={isMobile}
                           />
-                        ) : leftModal === 'admin-payments' ? (
+                        ) : leftModal === "admin-payments" ? (
                           <AdminPayments
                             goBack={goBackInHistoryOfTransitions}
                             setChosedModal={setChosedModal}
                             isMobile={isMobile}
                           />
-                        ) : leftModal === 'faq' ? (
+                        ) : leftModal === "faq" ? (
                           <Faq
                             goBack={goBackInHistoryOfTransitions}
                             isMobile={isMobile}
                             setChosedModal={setChosedModal}
                           />
-                        ) : leftModal === 'notifications' ? (
+                        ) : leftModal === "notifications" ? (
                           <NotificationComponent
                             goBack={goBackInHistoryOfTransitions}
                             isMobile={isMobile}
                             setChosedModal={setChosedModal}
                           />
-                        ) : leftModal === 'create-withdrawal' ? (
+                        ) : leftModal === "create-withdrawal" ? (
                           <WithdrawalsCreate
                             goBack={goBackInHistoryOfTransitions}
                             isMobile={isMobile}
                             setChosedModal={setChosedModal}
                           />
-                        ) : leftModal === 'notification-settings' ? (
+                        ) : leftModal === "notification-settings" ? (
                           <NotificationSettingsComponent
                             isMobile={isMobile}
                             setChosedModal={setChosedModal}
                           />
-                        ) : leftModal === 'contacts' ? (
+                        ) : leftModal === "contacts" ? (
                           <Contacts
                             setChosedModal={setChosedModal}
                             isMobile={isMobile}
@@ -371,7 +378,7 @@ const Home = (props) => {
                             setChosedId={setChosedId}
                             chosedModal={chosedModal}
                           />
-                        ) : leftModal === 'new-message' ? (
+                        ) : leftModal === "new-message" ? (
                           <NewMessage
                             goBack={goBackInHistoryOfTransitions}
                             setChosedId={setChosedId}
@@ -379,19 +386,19 @@ const Home = (props) => {
                             isMobile={isMobile}
                             setChosedModal={setChosedModal}
                           />
-                        ) : leftModal === 'payments' ? (
+                        ) : leftModal === "payments" ? (
                           <WithDrawals
                             isMobile={isMobile}
                             setChosedModal={setChosedModal}
                           />
-                        ) : leftModal === 'create-channel' ? (
+                        ) : leftModal === "create-channel" ? (
                           <CreateChannelComponent
                             goBack={goBackInHistoryOfTransitions}
                             isMobile={isMobile}
                             setChosedModal={setChosedModal}
                             channelViewModel={channelsViewModel}
                           />
-                        ) : leftModal === 'create-level' ? (
+                        ) : leftModal === "create-level" ? (
                           <CreateNewLevelComponent
                             isMobile={false}
                             isNewChannel
@@ -407,7 +414,7 @@ const Home = (props) => {
                             levelViewModel={levelsViewModel}
                             channelsViewModel={channelsViewModel}
                           />
-                        ) : leftModal === 'new-contact' ? (
+                        ) : leftModal === "new-contact" ? (
                           <NewContact
                             newContact={{}}
                             goBack={goBackInHistoryOfTransitions}
@@ -433,7 +440,7 @@ const Home = (props) => {
                                   Ничего не найдено
                                 </div>
                               )
-                            ) : leftModal === 'channels' ? (
+                            ) : leftModal === "channels" ? (
                               <ChannelsListComponent
                                 isMobile={isMobile}
                                 channelNameFromLink={channelNameFromLink}
@@ -443,9 +450,9 @@ const Home = (props) => {
                                 channelsViewModel={channelsViewModel}
                                 setLastOpened={setLastOpened}
                               />
-                            ) : rightModal === 'dialogs' ||
-                              rightModal === 'user-info' ||
-                              rightModal === 'update-contact' ? (
+                            ) : rightModal === "dialogs" ||
+                              rightModal === "user-info" ||
+                              rightModal === "update-contact" ? (
                               <DesktopChatsList
                                 id={user?.id}
                                 setChosedModal={setChosedModal}
@@ -465,8 +472,8 @@ const Home = (props) => {
                                   className="d-flex justify-content-center pt-3"
                                   onClick={() => {
                                     BrowserHistoryRouter.moveTo(
-                                      '/contacts/new_contact'
-                                    )
+                                      "/contacts/new_contact"
+                                    );
                                   }}
                                 >
                                   <div>
@@ -486,8 +493,8 @@ const Home = (props) => {
             </div>
 
             <div className="chat-block w-100">
-              <div style={{ margin: 'auto' }}>
-                {rightModal === 'channel-info' ? (
+              <div style={{ margin: "auto" }}>
+                {rightModal === "channel-info" ? (
                   <ChannelInfoComponent
                     isMobile={isMobile}
                     goBack={goBackInHistoryOfTransitions}
@@ -497,13 +504,13 @@ const Home = (props) => {
                     setChosedChannelForEdit={setChosedChannelForEdit}
                     channelViewModel={channelViewModel}
                   />
-                ) : rightModal === 'choose-level-subscribe' ? (
+                ) : rightModal === "choose-level-subscribe" ? (
                   <ChooseLevelComponent
                     isMobile={false}
                     chosedChannel={chosedChannelName}
                     chooseLevelViewModel={chooseLevelViewModel}
                   />
-                ) : rightModal === 'edit-channel' ? (
+                ) : rightModal === "edit-channel" ? (
                   <EditChannelComponent
                     path="/:channel/edit-channel"
                     isMobile={isMobile}
@@ -514,7 +521,7 @@ const Home = (props) => {
                     key={`edit_channel_component`}
                     channelViewModel={channelViewModel}
                   />
-                ) : rightModal === 'choose-level' ? (
+                ) : rightModal === "choose-level" ? (
                   <AdminChooseLevelComponent
                     setChosedModal={setChosedModal}
                     isMobile={isMobile}
@@ -525,7 +532,7 @@ const Home = (props) => {
                     chooseLevelViewModel={chooseLevelViewModel}
                     channelViewModel={channelViewModel}
                   />
-                ) : rightModal === 'add-contact' ? (
+                ) : rightModal === "add-contact" ? (
                   <NewContact
                     newContact={newContact}
                     side="right"
@@ -533,7 +540,7 @@ const Home = (props) => {
                     isMobile={false}
                     setLastOpened={setLastOpened}
                   />
-                ) : rightModal === 'channel-levels' ? (
+                ) : rightModal === "channel-levels" ? (
                   <ParticipationLevelsComponent
                     levelsViewModel={levelsViewModel}
                     isMobile={isMobile}
@@ -544,7 +551,7 @@ const Home = (props) => {
                     setChannelIdForCreatingLevel={setChannelIdForCreatingLevel}
                     setChosedEditLevelId={setChosedEditLevelId}
                   />
-                ) : rightModal === 'edit-level' ? (
+                ) : rightModal === "edit-level" ? (
                   <EditParticipationLevelComponent
                     chosedEditLevelId={chosedEditLevelId}
                     setChosedModal={setChosedModal}
@@ -552,7 +559,7 @@ const Home = (props) => {
                     isMobile={isMobile}
                     editLevelViewModel={editLevelViewModel}
                   />
-                ) : rightModal === 'create-level' ? (
+                ) : rightModal === "create-level" ? (
                   <CreateNewLevelComponent
                     isMobile={false}
                     chosedChannelName={chosedChannelNameForEdit}
@@ -562,7 +569,7 @@ const Home = (props) => {
                     levelViewModel={levelsViewModel}
                     channelsViewModel={channelsViewModel}
                   />
-                ) : rightModal === 'user-info' ? (
+                ) : rightModal === "user-info" ? (
                   <UserInfo
                     isMobile={isMobile}
                     goBack={goBackInHistoryOfTransitions}
@@ -572,7 +579,7 @@ const Home = (props) => {
                     id={openedUserIdModalInfo}
                     setNewContact={setNewContact}
                   />
-                ) : rightModal === 'update-contact' ? (
+                ) : rightModal === "update-contact" ? (
                   <UserUpdate
                     id={openedUserIdModalInfo}
                     setChosedModal={setChosedModal}
@@ -584,7 +591,7 @@ const Home = (props) => {
                   />
                 ) : (
                   <>
-                    {rightModal === 'dialogs' ? (
+                    {rightModal === "dialogs" ? (
                       <>
                         {user?.id && chosedId ? (
                           <PrivateMessages
@@ -610,7 +617,7 @@ const Home = (props) => {
                               <button
                                 className="write_button"
                                 onClick={() => {
-                                  setChosedModal('new-message')
+                                  setChosedModal("new-message");
                                 }}
                               >
                                 Новое сообщение
@@ -619,7 +626,7 @@ const Home = (props) => {
                           </DialogNotChosed>
                         )}
                       </>
-                    ) : rightModal === 'channel' || channelNameFromLink ? (
+                    ) : rightModal === "channel" || channelNameFromLink ? (
                       <>
                         {channelNameFromLink || chosedChannelName ? (
                           <div className="channel-messages">
@@ -651,7 +658,7 @@ const Home = (props) => {
                                 <button
                                   className="write_button"
                                   onClick={() => {
-                                    setChosedModal('create-channel')
+                                    setChosedModal("create-channel");
                                   }}
                                 >
                                   Создать канал
@@ -671,16 +678,16 @@ const Home = (props) => {
           <div className="d-flex w-100">
             {!isMobile ? (
               <div>
-                {(chosedModal || leftModal) === 'welcome-channel-message' ? (
+                {(chosedModal || leftModal) === "welcome-channel-message" ? (
                   <WelcomeChannelMessage />
-                ) : (leftModal || chosedModal) === 'enter-email' ? (
+                ) : (leftModal || chosedModal) === "enter-email" ? (
                   <AuthComponent
                     isUnauthorizedScreen
                     setChosedModal={setChosedModal}
                     isMobile={false}
                     authViewModel={authViewModel}
                   />
-                ) : leftModal === 'enter-code' ? (
+                ) : leftModal === "enter-code" ? (
                   <EnterCodeComponent
                     isMobile={false}
                     setLastOpened={setLastOpened}
@@ -689,7 +696,7 @@ const Home = (props) => {
                     setChosedModal={setChosedModal}
                     authViewModel={authViewModel}
                   />
-                ) : leftModal === 'register' ? (
+                ) : leftModal === "register" ? (
                   <SignUpComponent
                     isUnauthorizedScreen
                     isMobile={false}
@@ -721,7 +728,7 @@ const Home = (props) => {
         )}
       </div>
     </DialogsPageWrapper>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
