@@ -1,0 +1,41 @@
+.message__audio {
+  padding: 7px 15px 0 15px;
+  background-color: #50bcff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 15px 15px 0px 15px;
+  max-width: 250px;
+  overflow: hidden;
+}
+
+.message__audio-progress {
+  left: 0;
+  top: 0;
+  position: absolute;
+  background-color: white;
+  opacity: 0.3;
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.message__audio-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.message__audio-btn button {
+  display: flex;
+  cursor: pointer;
+  border: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 30px;
+}
+
+.message__audio-btn button img {
+  height: 33px;
+  position: relative;
+  left: 1px;
+  top: 4px;
+}

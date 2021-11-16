@@ -1,0 +1,7 @@
+.connectToChannelContainer {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    bottom: 15px;
+    width: 100%;
+}

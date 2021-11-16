@@ -1,0 +1,33 @@
+{
+  "short_name": "Message",
+  "name": "Message",
+  "icons": [
+    {
+      "src": "icon-default-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-default-64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-default-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-default-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/?utm_source=launcher",
+  "display": "standalone",
+  "prefer_related_applications ": "false",
+  "theme_color": "#ffffff",
+  "description": "Бесплатный мессенджер с диалогами и каналами с монетизацией",
+  "categories": ["social", "business"],
+  "background_color": "#ffffff"
+}

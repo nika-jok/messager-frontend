@@ -1,0 +1,44 @@
+.input {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  border-radius: 50px;
+  height: 40px;
+  padding-left: 19px;
+  padding-top: 9px;
+  padding-bottom: 8px;
+  padding-right: 19px;
+}
+
+.input-edit-account {
+  transition: color 0.1s linear, border-color 0.125s ease-in-out !important;
+}
+
+.input-unchanged {
+  transition: color 0.1s linear, border-color 0.125s ease-in-out !important;
+}
+
+#masked-input {
+  position: absolute;
+  left: 20px;
+  top: 0;
+  color: #7c7c7c;
+  pointer-events: none;
+  z-index: -1;
+}
+
+#masked-input i {
+  font-size: 15px;
+  color: transparent;
+  opacity: 0;
+  visibility: hidden;
+}
+
+@media (max-width: 360px) {
+  .input-amount,
+  .input-card {
+    width: 295px !important;
+  }
+  .input {
+    width: 295px !important;
+  }
+}

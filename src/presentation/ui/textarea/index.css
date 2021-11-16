@@ -1,0 +1,80 @@
+.textarea {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  border-radius: 40px;
+  height: 40px;
+  padding-left: 19px;
+  padding-top: 5px;
+  padding-bottom: 8px;
+  padding-right: 19px;
+  transition: border-color 0.125s ease-in-out;
+}
+
+.textarea:focus {
+  border-color: #50bcff;
+}
+
+.textarea-edit-account {
+  width: 420px !important;
+}
+
+.textarea::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 487px) {
+  .textarea-edit-account {
+    width: 333px !important;
+  }
+  .messages-wrapper-textarea textarea {
+    max-width: 340px;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .messages-wrapper-textarea {
+    padding-right: 10px !important;
+  }
+  .messages-wrapper-textarea textarea {
+    max-width: 290px;
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .messages-wrapper-textarea {
+    padding-right: 0 !important;
+  }
+  .messages-wrapper-textarea textarea {
+    width: 265px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .textarea-edit-account {
+    width: 295px !important;
+  }
+  .messages-wrapper-textarea textarea {
+    width: 255px !important;
+    margin-left: 5px;
+  }
+}
+
+@media (max-width: 350px) {
+  .messages-wrapper-textarea textarea {
+    width: 245px !important;
+  }
+}
+
+@media (max-width: 340px) {
+  .messages-wrapper-textarea textarea {
+    width: 235px !important;
+  }
+}
+
+@media (max-width: 332px) {
+  .messages-wrapper-textarea textarea {
+    width: 225px !important;
+  }
+}
